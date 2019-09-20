@@ -39,6 +39,8 @@
 
 .clear-btn {
   width: 44%;
+  right: 12px;
+  position: fixed;
 }
 
 .m-r-sm {
