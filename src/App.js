@@ -2,15 +2,13 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import TodoUsingHooks from './components/TodoUsingHooks';
+import TodoAppTabs from './components/tabs/Tabs';
 
 function App() {
   return (
     <div className="App">
       <div className="app-heading">Ingredients App using React Hooks</div>
-      <header className="App-header">
-        <TodoUsingHooks />
-      </header>
+      <TodoAppTabs />
     </div>
   );
 }

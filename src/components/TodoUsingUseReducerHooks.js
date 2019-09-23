@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import IngredientList from './IngredientList';
 
-const TodoUsingHooks = () => {
+const TodoUsingUseReducerHooks = () => {
     
     const [ingName, setIngName] = useState('')
     const [ingAmount, setIngAmount] = useState('')
@@ -117,4 +117,4 @@ const TodoUsingHooks = () => {
     )
 }
 
-export default TodoUsingHooks;
+export default TodoUsingUseReducerHooks;
