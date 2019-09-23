@@ -17,13 +17,13 @@ class TodoAppTabs extends React.Component {
   }
 
   toggle(tab) {
-    console.log(tab)
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
       });
     }
   }
+  
   render() {
     return (
       <div>
