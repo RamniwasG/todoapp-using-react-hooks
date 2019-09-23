@@ -1,20 +1,23 @@
 import React from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
-import TodoUsingUseStateHooks from '../TodoUsingUseStateHooks';
-import TodoUsingUseReducerHooks from '../TodoUsingUseReducerHooks';
-// import classnames from 'classnames';
+import TodoUsingUseStateHooks from '../using_useState/TodoUsingUseStateHooks';
+import TodoUsingUseReducerHooks from '../using_useReducer/TodoUsingUseReducerHooks';
 
 class TodoAppTabs extends React.Component {
   constructor(props) {
     super(props);
-
     this.toggle = this.toggle.bind(this);
     this.state = {
+      tabs: [
+        { tabIndex: '1', tabLabel: 'Using useState' },
+        { tabIndex: '2', tabLabel: 'Using useReducer' }
+      ],
       activeTab: '1'
     };
   }
 
   toggle(tab) {
+    console.log(tab)
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
@@ -22,41 +25,39 @@ class TodoAppTabs extends React.Component {
     }
   }
   render() {
-    // className={classnames({ active: this.state.activeTab === '1' })}
     return (
       <div>
         <Nav tabs>
-          <NavItem>
-            <NavLink
-              style={{ backgroundColor: this.state.activeTab === '1' ? 'lightgrey' : ''}}
-              onClick={() => { this.toggle('1'); }}
-            >
-              Using useState
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              onClick={() => { this.toggle('2'); }}
-            >
-              Using useReducer
-            </NavLink>
-          </NavItem>
+          { this.state.tabs.map((tab, index) => {
+            return (
+              <NavItem key={index}>
+                <NavLink
+                  style={{ backgroundColor: this.state.activeTab === tab.tabIndex ? 'lightgrey' : ''}}
+                  onClick={() => { this.toggle(tab.tabIndex) }}>
+                  {tab.tabLabel}
+                </NavLink>
+              </NavItem>
+            )
+          })
+        }
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
-          <TabPane tabId="1">
+          <TabPane tabId='1'>
             <Row>
               <Col sm="12">
                 <header className="App-header">
-                  <TodoUsingUseStateHooks  userReducer={false}/>
+                  <h3><b>Using useState</b></h3>
+                  <TodoUsingUseStateHooks />
                 </header>
               </Col>
             </Row>
           </TabPane>
-          <TabPane tabId="2">
+          <TabPane tabId='2'>
             <Row>
               <Col sm="12">
                 <header className="App-header">
-                  <TodoUsingUseReducerHooks userReducer={true}/>
+                  <h3><b>Using useReducer</b></h3>
+                  <TodoUsingUseReducerHooks />
                 </header>
               </Col>
             </Row>
