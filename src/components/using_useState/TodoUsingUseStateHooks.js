@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Alert } from 'reactstrap';
 import IngredientList from '../IngredientList';
 
 const TodoUsingUseStateHooks = () => {
@@ -7,6 +8,7 @@ const TodoUsingUseStateHooks = () => {
     const [ingAmount, setIngAmount] = useState('')
     const [ingredients, setIngredient] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(false)
 
     useEffect( () => {
         setIsLoading(true)
@@ -20,6 +22,9 @@ const TodoUsingUseStateHooks = () => {
                 var data = convertObjToArr(responseData)
                 setIngredient(data)
             } 
+        })
+        .catch(err => {
+            setError(true)
         })
     }, [])
 
@@ -53,6 +58,9 @@ const TodoUsingUseStateHooks = () => {
                 onClear()
             }
         })
+        .catch(err => {
+            setError(true)
+        })
     }
 
     const onEditClick = (ingredient) => {
@@ -72,6 +80,9 @@ const TodoUsingUseStateHooks = () => {
         .then(res => res.json())
         .then(responseData => {
             setIngredient(prevIngredients => prevIngredients.filter(ing => ing.id !== id))
+        })
+        .catch(err => {
+            setError(true)
         })
     }
 
@@ -107,11 +118,13 @@ const TodoUsingUseStateHooks = () => {
                     }
                 </form>
                 <br/><br/>
+                { error && <Alert color="danger">Something went wrong!</Alert> }
                 <IngredientList 
                     ingredients={ingredients}
                     onEdit={onEditClick}
                     onDelete={onDeleteClick}
-                    isLoading={isLoading} />
+                    isLoading={isLoading}
+                    isError={error} />
             </div>
         </React.Fragment>
     )

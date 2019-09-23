@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
+import { Alert } from 'reactstrap';
 import IngredientList from '../IngredientList';
+import IngredientReducer from './IngredientReducer'
 
 const TodoUsingUseReducerHooks = () => {
+
+    const [ingredients, dispatch] = useReducer(IngredientReducer, [])
     
     const [ingName, setIngName] = useState('')
     const [ingAmount, setIngAmount] = useState('')
-    const [ingredients, setIngredient] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(false)
 
     useEffect( () => {
         setIsLoading(true)
-        fetch('https://todo-using-hooks.firebaseio.com/ingredients.json')
+        fetch('https://todo-using-hooks.firebaseio.com/ingredients.son')
         .then(response => {
             setIsLoading(false)
             return response.json()
@@ -18,8 +22,14 @@ const TodoUsingUseReducerHooks = () => {
         .then(responseData => {
             if(responseData) {
                 var data = convertObjToArr(responseData)
-                setIngredient(data)
+                dispatch({
+                    type: 'SET',
+                    ingredients: data
+                })
             } 
+        })
+        .catch((err) => {
+            setError(true)
         })
     }, [])
 
@@ -44,14 +54,19 @@ const TodoUsingUseReducerHooks = () => {
         .then(res => res.json())
         .then(responseData => {
             if(responseData) {
-                setIngredient( prevIngredients => [...prevIngredients, { 
+                dispatch({
+                    type: 'SET',
+                    ingredient: { 
                         id: responseData.name,
                         name: ingName,
                         amount: ingAmount
-                    }]
-                )
+                    }
+                })
                 onClear()
             }
+        })
+        .catch((err) => {
+            setError(true)
         })
     }
 
@@ -65,13 +80,19 @@ const TodoUsingUseReducerHooks = () => {
         setIngAmount('')
     }
 
-    const onDeleteClick = (id) => {
-        fetch(`https://todo-using-hooks.firebaseio.com/ingredients/${id}.json`, {
+    const onDeleteClick = (ingridientId) => {
+        fetch(`https://todo-using-hooks.firebaseio.com/ingredients/${ingridientId}.json`, {
             method: 'DELETE'
         })
         .then(res => res.json())
         .then(responseData => {
-            setIngredient(prevIngredients => prevIngredients.filter(ing => ing.id !== id))
+            dispatch({
+                type: 'DELETE',
+                id: ingridientId
+            })
+        })
+        .catch((err) => {
+            setError(true)
         })
     }
 
@@ -107,6 +128,7 @@ const TodoUsingUseReducerHooks = () => {
                     }
                 </form>
                 <br/><br/>
+                { error && <Alert color="danger">Something went wrong!</Alert> }
                 <IngredientList 
                     ingredients={ingredients}
                     onEdit={onEditClick}

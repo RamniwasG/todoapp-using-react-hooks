@@ -19,7 +19,7 @@ const IngredientList = (props) => {
         <ul className="list-group">
             { props.isLoading && <Loader /> }
             { !props.isLoading && props.ingredients.length === 0 &&
-                <li className="list-group-item text-center">No Ingredient Added Yet!</li>
+                <li className="list-group-item text-center">{props.isError ? 'Error!' : 'No Ingredient Added Yet!'}</li>
             }
             { !props.isLoading && props.ingredients.length > 0 && props.ingredients.map( (ingredient, index) => {
                 return (

@@ -46,7 +46,6 @@ class TodoAppTabs extends React.Component {
             <Row>
               <Col sm="12">
                 <header className="App-header">
-                  <h3><b>Using useState</b></h3>
                   <TodoUsingUseStateHooks />
                 </header>
               </Col>
@@ -56,7 +55,6 @@ class TodoAppTabs extends React.Component {
             <Row>
               <Col sm="12">
                 <header className="App-header">
-                  <h3><b>Using useReducer</b></h3>
                   <TodoUsingUseReducerHooks />
                 </header>
               </Col>
