@@ -1,22 +1,26 @@
 import React, { useState, useReducer, useEffect } from 'react';
 import { Alert } from 'reactstrap';
 import IngredientList from '../IngredientList';
-import IngredientReducer from './IngredientReducer'
+import IngredientReducer from './IngredientReducer';
+import HttpReducer from './HttpReducer';
 
 const TodoUsingUseReducerHooks = () => {
 
     const [ingredients, dispatch] = useReducer(IngredientReducer, [])
-    
+    const [httpState, dispatchHttp] = useReducer(HttpReducer, { loading: false, error: null });
+
     const [ingName, setIngName] = useState('')
     const [ingAmount, setIngAmount] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState(false)
+    // const [isLoading, setIsLoading] = useState(false)
+    // const [error, setError] = useState(false)
 
     useEffect( () => {
-        setIsLoading(true)
-        fetch('https://todo-using-hooks.firebaseio.com/ingredients.son')
+        // setIsLoading(true)
+        dispatchHttp({ type: 'SEND'});
+        fetch('https://todo-using-hooks.firebaseio.com/ingredients.json')
         .then(response => {
-            setIsLoading(false)
+            // setIsLoading(false)
+            dispatchHttp({ type: 'RESPONSE' });
             return response.json()
         })
         .then(responseData => {
@@ -29,7 +33,7 @@ const TodoUsingUseReducerHooks = () => {
             } 
         })
         .catch((err) => {
-            setError(true)
+            dispatchHttp({ type: 'ERROR', errorMessage: err.errorMessage });
         })
     }, [])
 
@@ -46,12 +50,16 @@ const TodoUsingUseReducerHooks = () => {
     }
 
     const onAddIngredient = () => {
+        dispatchHttp({ type: 'SEND' });
         fetch('https://todo-using-hooks.firebaseio.com/ingredients.json', {
             method: 'POST',
             body: JSON.stringify({ name: ingName, amount: ingAmount }),
             headers: { 'Content-Type': 'application/json' }
         })
-        .then(res => res.json())
+        .then(res => {
+            dispatchHttp({ type: 'RESPONSE' });
+            res.json()
+        })
         .then(responseData => {
             if(responseData) {
                 dispatch({
@@ -66,7 +74,7 @@ const TodoUsingUseReducerHooks = () => {
             }
         })
         .catch((err) => {
-            setError(true)
+            dispatchHttp({ type: 'ERROR', errorMessage: err.errorMessage });
         })
     }
 
@@ -81,10 +89,14 @@ const TodoUsingUseReducerHooks = () => {
     }
 
     const onDeleteClick = (ingridientId) => {
+        dispatchHttp({ type: 'SEND' });
         fetch(`https://todo-using-hooks.firebaseio.com/ingredients/${ingridientId}.json`, {
             method: 'DELETE'
         })
-        .then(res => res.json())
+        .then(res => {
+            dispatchHttp({ type: 'RESPONSE' });
+            return res.json()
+        })
         .then(responseData => {
             dispatch({
                 type: 'DELETE',
@@ -92,7 +104,7 @@ const TodoUsingUseReducerHooks = () => {
             })
         })
         .catch((err) => {
-            setError(true)
+            dispatchHttp({ type: 'ERROR', errorMessage: err.errorMessage });
         })
     }
 
@@ -128,12 +140,12 @@ const TodoUsingUseReducerHooks = () => {
                     }
                 </form>
                 <br/><br/>
-                { error && <Alert color="danger">Something went wrong!</Alert> }
+                { httpState.error && <Alert color="danger">Something went wrong!</Alert> }
                 <IngredientList 
                     ingredients={ingredients}
                     onEdit={onEditClick}
                     onDelete={onDeleteClick}
-                    isLoading={isLoading} />
+                    isLoading={httpState.loading} />
             </div>
         </React.Fragment>
     )
