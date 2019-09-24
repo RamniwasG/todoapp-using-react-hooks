@@ -3,6 +3,8 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap
 import TodoUsingUseStateHooks from '../using_useState/TodoUsingUseStateHooks';
 import TodoUsingUseReducerHooks from '../using_useReducer/TodoUsingUseReducerHooks';
 
+import './tabs.css'
+
 class TodoAppTabs extends React.Component {
   constructor(props) {
     super(props);
@@ -45,6 +47,7 @@ class TodoAppTabs extends React.Component {
           <TabPane tabId='1'>
             <Row>
               <Col sm="12">
+                <h3 className="text-center p-t-8">Using useState Hooks</h3>
                 <header className="App-header">
                   <TodoUsingUseStateHooks />
                 </header>
@@ -54,6 +57,7 @@ class TodoAppTabs extends React.Component {
           <TabPane tabId='2'>
             <Row>
               <Col sm="12">
+                <h3 className="text-center p-t-8">Using useReducer Hooks</h3>
                 <header className="App-header">
                   <TodoUsingUseReducerHooks />
                 </header>

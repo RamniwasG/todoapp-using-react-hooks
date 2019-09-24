@@ -58,12 +58,12 @@ const TodoUsingUseReducerHooks = () => {
         })
         .then(res => {
             dispatchHttp({ type: 'RESPONSE' });
-            res.json()
+            return res.json()
         })
         .then(responseData => {
             if(responseData) {
                 dispatch({
-                    type: 'SET',
+                    type: 'ADD',
                     ingredient: { 
                         id: responseData.name,
                         name: ingName,
