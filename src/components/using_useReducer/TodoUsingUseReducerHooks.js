@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useState, useReducer, useEffect, useCallback } from 'react';
 import { Alert } from 'reactstrap';
 import IngredientList from '../IngredientList';
 import IngredientReducer from './IngredientReducer';
@@ -49,11 +49,15 @@ const TodoUsingUseReducerHooks = () => {
         return data
     }
 
-    const onAddIngredient = () => {
+    const handleOnAddIngredient = () => {
+        onAddIngredient({ name: ingName, amount: ingAmount })
+    }
+
+    const onAddIngredient = useCallback(ingredient => {
         dispatchHttp({ type: 'SEND' });
         fetch('https://todo-using-hooks.firebaseio.com/ingredients.json', {
             method: 'POST',
-            body: JSON.stringify({ name: ingName, amount: ingAmount }),
+            body: JSON.stringify(ingredient),
             headers: { 'Content-Type': 'application/json' }
         })
         .then(res => {
@@ -66,8 +70,7 @@ const TodoUsingUseReducerHooks = () => {
                     type: 'ADD',
                     ingredient: { 
                         id: responseData.name,
-                        name: ingName,
-                        amount: ingAmount
+                        ...ingredient
                     }
                 })
                 onClear()
@@ -76,7 +79,7 @@ const TodoUsingUseReducerHooks = () => {
         .catch((err) => {
             dispatchHttp({ type: 'ERROR', errorMessage: err.errorMessage });
         })
-    }
+    }, [])
 
     const onEditClick = (ingredient) => {
         setIngName(ingredient.name)
@@ -131,7 +134,7 @@ const TodoUsingUseReducerHooks = () => {
                     <button 
                         type="button" 
                         className="btn btn-primary add-ingredient m-r-sm"  
-                        onClick={onAddIngredient}>Add Ingredient</button>
+                        onClick={handleOnAddIngredient}>Add Ingredient</button>
                     { (ingName !== '' || ingAmount !== '') && 
                         <button 
                             type="button" 
