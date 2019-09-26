@@ -46,3 +46,8 @@
 .m-r-sm {
   margin-right: 8px;
 }
+
+.list-scroll-height {
+  max-height: 285px;
+  overflow-y: scroll;
+}

@@ -16,7 +16,7 @@ const IngredientList = (props) => {
 
     return <React.Fragment>
         <h4 className="text-center">Ingredients List</h4>
-        <ul className="list-group">
+        <ul className="list-group list-scroll-height">
             { props.isLoading && <Loader /> }
             { !props.isLoading && props.ingredients.length === 0 &&
                 <li className="list-group-item text-center">{props.isError ? 'Error!' : 'No Ingredient Added Yet!'}</li>
