@@ -1,9 +1,9 @@
 const HttpReducer = (currHttpState, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case 'SEND':
             return { loading: false, error: null };
         case 'RESPONSE':
-            return { ...currHttpState, loading: false };
+            return { ...currHttpState, loading: false, data: action.responseData, indentifier: action.indentifier };
         case 'ERROR':
             return { loading: false, error: action.errorMessage };
         case 'CLEAR':
