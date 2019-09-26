@@ -1,17 +1,4 @@
-const HttpReducer = (currHttpState, action) => {
-    switch (action.type) {
-        case 'SEND':
-            return { loading: false, error: null };
-        case 'RESPONSE':
-            return { ...currHttpState, loading: false, data: action.responseData };
-        case 'ERROR':
-            return { loading: false, error: action.errorMessage };
-        case 'CLEAR':
-            return { error: null }
-        default:
-            throw new Error('Should not reached!')
-    }
-}
+import HttpReducer from '../components/using_useReducer/HttpReducer';
 
 const useHttp = () => {
 
