@@ -1,39 +1,49 @@
+import { useReducer, useCallback } from 'react';
 import HttpReducer from '../components/using_useReducer/HttpReducer';
 
 const useHttp = () => {
 
-    const [httpState, dispatchHttp] = useReducer(
-        HttpReducer, {
+    const [httpState, dispatchHttp] = useReducer(HttpReducer, {
         loading: false,
-        error: null
-    }
-    );
+        error: null,
+        data: null,
+        extra: null,
+        indentifier: null
+    });
 
-    const sendRequest = (url, method, data, extra, indentifier) => {
-        dispatchHttp({ type: 'SEND' })
-        fetch(url, {
-            method: method,
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json' }
-        })
-            .then(res => {
-                return res.json()
+    const clear = useCallback(() => dispatchHttp({ type: 'CLEAR' }), []);
+
+    const sendRequest = useCallback(
+        (url, method, body, extra, reqIndentifier) => {
+            dispatchHttp({ type: 'SEND', indentifier: reqIndentifier })
+            fetch(url, {
+                method: method,
+                body: body,
+                headers: { 'Content-Type': 'application/json' }
             })
-            .then(responseData => {
-                dispatchHttp({ type: 'RESPONSE', responseData: responseData, extra: extra, indentifier: indentifier });
-            })
-            .catch((err) => {
-                dispatchHttp({ type: 'ERROR', errorMessage: err.errorMessage });
-            })
-    }
+                .then(res => {
+                    return res.json()
+                })
+                .then(responseData => {
+                    dispatchHttp({
+                        type: 'RESPONSE',
+                        responseData: responseData,
+                        extra: extra
+                    });
+                })
+                .catch((err) => {
+                    dispatchHttp({ type: 'ERROR', errorMessage: err.errorMessage });
+                })
+        }, []);
 
     return {
         isLoading: httpState.loading,
         error: httpState.error,
         data: httpState.data,
-        extra: extra,
-        indentifier: indentifier,
-        sendRequest: sendRequest
+        extra: httpState.extra,
+        indentifier: httpState.indentifier,
+        sendRequest: sendRequest,
+        clear: clear
     }
 
 }

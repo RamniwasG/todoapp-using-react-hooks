@@ -1,5 +1,5 @@
 const IngredientReducer = (currentState, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case 'SET':
             return action.ingredients;
         case 'ADD':

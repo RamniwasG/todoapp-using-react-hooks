@@ -14,7 +14,7 @@ class TodoAppTabs extends React.Component {
         { tabIndex: '1', tabLabel: 'Using useState' },
         { tabIndex: '2', tabLabel: 'Using useReducer' }
       ],
-      activeTab: '1'
+      activeTab: '2'
     };
   }
 
@@ -25,23 +25,23 @@ class TodoAppTabs extends React.Component {
       });
     }
   }
-  
+
   render() {
     return (
       <div>
         <Nav tabs>
-          { this.state.tabs.map((tab, index) => {
+          {this.state.tabs.map((tab, index) => {
             return (
               <NavItem key={index}>
                 <NavLink
-                  style={{ backgroundColor: this.state.activeTab === tab.tabIndex ? 'lightgrey' : ''}}
+                  style={{ backgroundColor: this.state.activeTab === tab.tabIndex ? 'lightgrey' : '' }}
                   onClick={() => { this.toggle(tab.tabIndex) }}>
                   {tab.tabLabel}
                 </NavLink>
               </NavItem>
             )
           })
-        }
+          }
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId='1'>
@@ -70,4 +70,4 @@ class TodoAppTabs extends React.Component {
   }
 }
 
-export default  TodoAppTabs;
+export default TodoAppTabs;
